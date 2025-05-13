@@ -1,6 +1,7 @@
 # Proyecto empezado el 07/05/25
+# 13-05-25, 12:07p.m
 
-# 06-05-25, 12:07p.m
+from datetime import datetime
 
 class Book:
     def __init__(self, title, author, year_publication, genre, available):
@@ -78,6 +79,53 @@ libro7 = Book(
 
 catalogo = [libro1, libro2, libro3, libro4, libro5, libro6, libro7]
 
+def agregar_libro():
+    try:
+        #Validar title:
+        title = input("Ingrese el título: ")
+        while True:
+            if not title:
+                print("El titulo no debe estar vacio")
+                title = input("> Ingrese el título nuevamente: ")
+            else:
+                break
+
+        #Validar author
+        author = input("Agrege el autor: ")
+        while not author.replace(" ", "").isalpha():
+            print("El autor no debe estar vacio y solo tener letras")
+            author = input("> Agrege el autor nuevamente: ")
+
+        #Validar year_publication
+        current_year = datetime.now().year
+        year_publication = input("Ingrese el año de publicación: ")
+        while True:
+            if year_publication.isdigit() and 1300 <= int(year_publication) <= current_year:
+                year_publication = int(year_publication)
+                break
+            else:
+                print(f"El año debe estar entre 1300 y {current_year}")
+                year_publication = input("> Ingrese el año de publicación nuevamente: ")
+
+        # Validar que el genero no esté vacío
+        genre = input("Ingrese el género: ")
+        while not genre or not genre.isalpha():
+            print("El género no debe estar vacio ni tampoco tener letras")
+            genre = input("> Ingrese el género nuevamente: ")
+
+        #Validar available
+        available = input("Ingrese disponibilidad (SI o NO): ").strip().lower()
+        while available not in ["si", "no"]:
+            available = input("Error: sólo responda -> 'SI' ó 'NO': ").strip().lower()
+        available = (available == "si")
+
+        new_book = Book(title, author, year_publication, genre, available)
+        catalogo.append(new_book)
+        print(f"\u2705 Libro '{title}' añadido exitosamente!")
+    
+    except Exception as e:
+        print(f"Error inesperado: {e}. Intente nuevamente.")
+
 
 def ver_catálogo_completo():
     count = 0
@@ -136,27 +184,30 @@ def main():
     while True:
         print(" === Biblioteca Python == ")
         print('''
-        1. Ver catálogo completo  
-        2. Buscar libros por género  
-        3. Prestar un libro  
-        4. Devolver un libro  
-        5. Salir 
+        1. Agregar nuevo libro
+        2. Ver catálogo completo  
+        3. Buscar libros por género  
+        4. Prestar un libro  
+        5. Devolver un libro  
+        6. Salir 
         ''')
         try:       
-            option = int(input(">>> ")) 
+            option = int(input(">>> "))
             if option == 1:
-                ver_catálogo_completo()
+                agregar_libro() 
             elif option == 2:
-                buscar_libros_genero()
+                ver_catálogo_completo()
             elif option == 3:
-                prestar_libro()
+                buscar_libros_genero()
             elif option == 4:
-                devolver_libro()
+                prestar_libro()
             elif option == 5:
+                devolver_libro()
+            elif option == 6:
                 salir()
                 break
             else:
-                print("Opción no válida. Ingrese 1-5.")
+                print("Opción no válida. Ingrese 1-6.")
         except Exception as error:
             print("Ingrese una opción válida: ", error)
 
